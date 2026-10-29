@@ -1,86 +1,93 @@
-# Glance
+# Build your own memory meter with AI
 
-**Your PC's memory use, right by the clock.** Hover it to see which apps are using the most, and end a greedy one in two clicks, without opening Task Manager.
+A free little Windows app that shows your memory use right by the clock. Hover it to see which apps are using the most, and end a greedy one in two clicks, without opening Task Manager.
 
-![The Glance number on the taskbar with its card open: memory and CPU meters and the top ten apps with End buttons](docs/glance.png)
+**You build it yourself, with AI, without writing any code.** This repository has everything you need: the step-by-step kit, every message to send, and the finished code to compare with or build directly. It's all open source.
 
-- **A number by the clock** shows how full your memory is. Green under 60%, amber to 85%, red above. When memory crosses 90%, the tile pulses red once. That's all the nagging it does.
-- **Hover the number** and a card slides up: memory and CPU meters, the app that grew the most in the last 10 minutes, and the top ten apps. Each app is one row, the way Task Manager groups them, so your browser is one line, not forty.
-- **End takes two clicks.** The first click turns the button into a red "End?"; the second ends the app. Move away or wait a few seconds and it cancels. Windows' own parts show a lock instead of a button, and Windows Explorer (your taskbar and desktop) gets "Restart" instead of "End".
-- **Free, small, private.** One file, no install, no account. It reads your PC's own numbers and never sends anything anywhere.
+![The memory number on the taskbar with its card open: memory and CPU meters and the top ten apps with End buttons](docs/glance.png)
 
-## Get it
+## Start here
 
-1. Download **Glance.exe** from the [latest release](https://github.com/petercarter19-hue/glance/releases/latest).
-2. Double-click it. A notice says Glance is running, and the number appears by the clock.
-   - If Windows says **"Windows protected your PC"**, click **More info**, then **Run anyway**. Windows shows this for apps from small developers that aren't code-signed. The code is all here to read.
-   - If your browser says the file "isn't commonly downloaded", choose **Keep**.
-3. **Don't see the number?** Windows tucks new icons under the little **^** arrow by the clock. Click the **^** and drag Glance onto the taskbar. It stays there after that.
+1. **Read the kit:** [KIT.md](KIT.md), or the printable [PDF](docs/build-it-yourself-kit.pdf). It covers what you need, a 10-minute setup, your options, and every step.
+2. **Paste the kickoff message** from [prompts/kickoff.txt](prompts/kickoff.txt) into your AI app. Change the [brackets] first.
+3. **After each step, try it.** If it works, say "Works. Next step." That's most of the conversation.
 
-Glance starts with Windows, and it's in your Start menu as **Glance**.
+It takes about an hour and a half, mostly waiting. You need a Windows PC and an AI app that can build on your computer: one that can create files and run programs for you, not just chat. Nothing else to pay for.
 
-**To restart it,** open it again, from the Start menu or by double-clicking Glance.exe. The running copy closes and a fresh one takes its place.
+## What's in here
 
-## Using it
+| | |
+|---|---|
+| [KIT.md](KIT.md) | The build-it-yourself kit: setup, options, the steps, making it your own, fixing problems, staying safe |
+| [docs/build-it-yourself-kit.pdf](docs/build-it-yourself-kit.pdf) | The same kit, ready to print |
+| [prompts/](prompts/) | Every message to paste, as files you can copy, with [the order to send them](prompts/README.md) |
+| [src/](src/) | The finished code of our copy, which we call Glance. Compare it with yours, or build it directly |
+| [tools/](tools/) | The tests our copy passed, and the small test program they use |
 
-- **Hover** the number to open the card; move away to close it.
-- **Click** the number to pin the card open; press Esc or click anywhere else to close it.
-- **Right-click** the number for the menu:
-  - **Show CPU tile:** adds a second number for CPU use. Hovering the CPU tile sorts the list by CPU.
-  - **Start with Windows:** on by default.
-  - **Open Task Manager**, **About Glance**.
-  - **Remove Glance from this PC:** see below.
-  - **Quit Glance.**
-- **If Windows won't end an app** (one running as administrator), the button offers **As admin**. Windows asks your permission first. If it still refuses, the card says so.
+Every lesson from our own build is already a line in the kickoff message. That includes what a second, independent review found before we shared it. So your first try should go more smoothly than ours did.
 
-End works like Task Manager's "End task": anything unsaved in that app is lost. Save your work first, and only end apps you recognize.
+## Build the finished code instead
 
-## Remove it
+Want to skip to the end, or see how yours compares? Download this repository (the green **Code** button, then **Download ZIP**), unzip it, open the folder in your AI app, and say:
 
-Right-click the number and choose **Remove Glance from this PC**. That turns off Start with Windows, removes it from the Start menu, deletes its settings, and closes it. Then delete Glance.exe.
+```text
+Build this app into one file I can double-click, then start it. Install Microsoft's free .NET SDK first if it's missing.
+```
 
-## Requirements
-
-Windows 11 or Windows 10, 64-bit. Nothing else to install. The file is about 49 MB, because it carries everything it needs inside it.
-
-## Privacy
-
-Glance only reads numbers Windows already has (the same ones Task Manager shows). It makes no network connections and collects nothing. Its settings and an error log, if anything goes wrong, live in `%LocalAppData%\Glance`.
-
-## Build it yourself
-
-Needs the [.NET 10 SDK](https://dotnet.microsoft.com/download).
+Or, if you have the [.NET 10 SDK](https://dotnet.microsoft.com/download), run this in the folder:
 
 ```
 dotnet publish Glance.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o dist
 ```
 
-`tools\make-icon.ps1` redraws `glance.ico`.
+The app is `dist\Glance.exe`. Because you built it on your own PC, Windows opens it without any warning.
 
-### Tests
+**Just want to try ours?** A ready-made Glance.exe is on the [Releases page](https://github.com/petercarter19-hue/glance/releases/latest). Windows shows "Windows protected your PC" for downloaded apps that aren't code-signed. Click **More info**, then **Run anyway**.
 
-- `tools\smoke-test.ps1` runs the app against a test program that holds 3 GB of memory (`tools\Hog`; publish it first with the same command into `tools\Hog\dist`), posts two End clicks to the card, and checks the test program is gone.
-- `tools\message-test.ps1` posts the shell's own hover and click messages to the tray window and checks the card opens, pins and closes.
-- Both drop the app's own pictures of itself into `tools\shots\`.
+## Using it
 
-Debug flags: `--preview` writes the card's state and pictures (`preview.txt`, `card.png`, `tiles.png`) to `%LocalAppData%\Glance` every second; `--pinned` opens the card pinned at startup; `--quit` closes the running copy.
+- **The number by the clock** is your memory use. Green under 60%, amber to 85%, red above. When memory crosses 90%, it pulses red once.
+- **Hover** the number to open the card. You'll see memory and CPU meters, the app that grew the most in the last 10 minutes, and the top ten apps, one row per app.
+- **End takes two clicks.** The first click turns the button into a red "End?"; the second ends the app. Windows' own parts show a lock instead, and Windows Explorer gets "Restart". If Windows refuses, the button offers **As admin**.
+- **Click** the number to pin the card open. **Right-click** it for the menu: Show CPU tile, Start with Windows, Open Task Manager, Remove from this PC, Quit.
+- **Can't see the number?** Windows tucks new icons under the **^** arrow by the clock. Click it and drag the number onto the taskbar.
+- **To restart it,** open it again from the Start menu.
 
-## How it works
+End works like Task Manager's "End task": anything unsaved in that app is lost.
 
-C# / .NET 10 WinForms, no main window.
+**To remove it,** right-click the number and choose **Remove Glance from this PC**, then delete the app file.
 
-- **`TrayIcon`** talks to `Shell_NotifyIcon` directly at version 4, so the shell sends `NIN_POPUPOPEN` on hover. That is what lets the card replace the stock tooltip.
-- **`ProcessScanner`** snapshots processes with Toolhelp, reads each one's private working set (the same number Task Manager shows) and CPU time, and groups them by executable.
-- **`ProcessKiller`** ends a group plus the processes it started:
+**Privacy:** it only reads numbers Windows already has, makes no network connections, and collects nothing. Its settings live in `%LocalAppData%\Glance`.
+
+## How the finished code works
+
+C# / .NET 10 WinForms, no main window, Windows 10 or 11 (64-bit).
+
+- **`TrayIcon`** talks to `Shell_NotifyIcon` at version 4, so Windows sends `NIN_POPUPOPEN` on hover. That is what lets the card replace the stock tooltip.
+- **`ProcessScanner`** reads each process's private working set (Task Manager's "Memory" number) and CPU time, and groups processes by executable.
+- **`ProcessKiller`** ends an app plus the processes it started:
   - It stays inside the user's own session.
   - A process only counts as a child if it started after its parent, because Windows reuses process numbers.
   - Each process is checked by its start time right before it's ended.
   - Windows' protected processes and Explorer are never swept in.
-  - **As admin** runs a second copy of Glance elevated with `--end`, which makes the same checks.
-- **`HoverCard`** is a borderless, no-activate, custom-painted window that follows the Windows light or dark setting.
+  - **As admin** runs a second copy of the app elevated with `--end`, which makes the same checks.
+- **`HoverCard`** is a borderless, custom-painted window that follows the Windows light or dark setting and sits next to the tile on any taskbar edge.
+- **`Shortcut`** keeps the Start menu entry.
+- **Opening the app while it's running** signals the running copy to quit and takes its place.
 
-Opening Glance while it's running signals the running copy to quit (a named event) and takes over the single-instance lock, which is how "open it again to restart" works.
+**Tests** (in `tools\`). They never move your mouse, take pictures of your screen, or end anything except the test program:
+
+- `release-test.ps1` runs 22 checks: first run, restart, quit, a moved file, End with a child process, the start-time check, and a leak check.
+- `message-test.ps1` sends Windows' own hover and click messages to the app.
+- `smoke-test.ps1` runs End against a test program that holds 3 GB.
+- **Before running them:** publish `tools\Hog` into `tools\Hog\dist` first.
+
+**Debug flags:**
+
+- `--preview` writes the card's state and pictures to `%LocalAppData%\Glance` every second.
+- `--pinned` opens the card at startup.
+- `--quit` closes the running copy.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE): use it, change it, share it.
